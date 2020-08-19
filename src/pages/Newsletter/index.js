@@ -1,6 +1,6 @@
 import React from 'react';
-import { Heading, Container, Box, Text, Tag, Flex, IconButton } from '@chakra-ui/core';
-import { FaHome, FaHeart, FaHeartBroken, FaEdit} from 'react-icons/fa';
+import { Heading, Container, Box, Text, Tag, Flex, IconButton, Image, FormLabel, Input, FormControl, Stack, Button } from '@chakra-ui/core';
+import { FaHome, FaHeart, FaHeartBroken, FaEdit, FaNewspaper} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 
@@ -13,14 +13,34 @@ const Newsletter = () => {
         <Box mt={2} pl={2} maxW="960px">
           <Link to="/">
             <IconButton icon={<FaHome />} />
-          </Link>          
+          </Link> / Newsletter          
         </Box>
-        <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
-          <Heading my={2}>Newsletter</Heading>
-          <Box maxW="960px" mt={3}>
-            <Text> Lorem </Text>
+        <Box maxW="960px" my={8} display="flex" border="1px solid #ddd" shadow="md" borderRadius="5px" p={5}>
+            <Box maxW="200px" flexShrink={0}>
+              <FaNewspaper size={126} />
+            </Box>
+            <Box flex="1 1 700px" p={3} ml={3}> 
+              <Heading color="blue.500">Newsletter</Heading>
+              <Heading size="md" mt={5}>
+                Quer ficar por dentro de tudo ?
+              </Heading>
+              <Text mt={3}>
+                É fácil , cadastre o seu melhor email e fique por dentro de todas as novidades aqui do blog.
+              </Text>
+              <Box maxW="700px" mt={8}>
+                <Heading size="md">Preencha seu Email</Heading>
+                <Stack spacing={6} my={3}>
+                  <FormControl>
+                    <FormLabel>Email</FormLabel>
+                    <Input type="email" placeholder="Seu melhor email"/>
+                  </FormControl>
+                  <FormControl>
+                    <Button variant="outline" colorScheme="blue" float="right">Enviar</Button>
+                  </FormControl>
+                </Stack>
+              </Box>
+            </Box>
           </Box>
-        </Box>
       </Container>  
     </MainLayout>
   );

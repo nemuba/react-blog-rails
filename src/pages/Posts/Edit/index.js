@@ -55,7 +55,7 @@ const PostEdit = () => {
         <Box mt={2} pl={2} maxW="960px">
           <Link to="/">
             <IconButton icon={<FaHome />} />
-          </Link>
+          </Link> / Editar Post
         </Box>
         <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
           <Heading my={2}>Editar Post</Heading>

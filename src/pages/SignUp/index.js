@@ -68,13 +68,25 @@ const SignUp = () => {
                 <FormLabel>
                   Senha
                 </FormLabel>
-                <Input onChange={handleChangeInput} placeholder="Senha" name="password" value={form?.password}/>
+                <Input 
+                  onChange={handleChangeInput} 
+                  placeholder="Senha" 
+                  name="password" 
+                  value={form?.password}
+                  type="password"
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>
                   Confirme a Senha
                 </FormLabel>
-                <Input onChange={handleChangeInput} placeholder="Confirme a Senha" name="password_confirmation" value={form?.password_confirmation} />
+                <Input 
+                  onChange={handleChangeInput} 
+                  placeholder="Confirme a Senha" 
+                  name="password_confirmation" 
+                  value={form?.password_confirmation} 
+                  type="password"
+                />
               </FormControl>
             </Stack>
             <Box display="flex" justifyContent="space-between">
