@@ -14,7 +14,7 @@ import {
 import { FaTrash } from 'react-icons/fa';
 // import { Container } from './styles';
 
-function Dialog({handleDelete, id}) {
+function Dialog({title,handleDelete, id}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleClose = () => {
@@ -30,7 +30,7 @@ function Dialog({handleDelete, id}) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay>
           <ModalContent>
-            <ModalHeader>Excluir Post</ModalHeader>
+            <ModalHeader>{title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Text>Tem Certeza ?</Text>

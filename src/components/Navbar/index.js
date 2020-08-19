@@ -49,7 +49,7 @@ const Navbar = () => {
             <Link to="/about">Sobre</Link>
           </MenuItem>
           <MenuItem>
-            <Link to="/contact">Contato</Link>
+            <Link to="/newsletter">Newsletter</Link>
           </MenuItem>
         </MenuGroup>
       </MenuList>

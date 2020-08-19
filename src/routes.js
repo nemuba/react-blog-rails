@@ -7,6 +7,8 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Logout from './pages/Logout';
 import Account from './pages/Account';
+import About from './pages/About';
+import Newsletter from './pages/Newsletter';
 import Reading from './pages/Reading';
 import PostNew from './pages/Posts/New';
 import PostEdit from './pages/Posts/Edit';
@@ -34,6 +36,8 @@ const Routes = () =>{
         <Route path="/signin" exact component={SignIn} />
         <Route path="/signup" exact component={SignUp} />
         <Route path="/logout" exact component={Logout} />
+        <Route path="/about" exact component={About} />
+        <Route path="/newsletter" exact component={Newsletter} />
         <PrivateRoute path="/post/new" exact component={PostNew} />
         <PrivateRoute path="/post/:id/edit" exact component={PostEdit} />
         <Route path="/post/:id" exact component={Reading} />

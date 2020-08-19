@@ -15,7 +15,7 @@ const Comments = ({comments, post, setPost}) => {
       }
       
       <Heading fontSize="1.0em" mt={3}>Comentários {comments?.length}</Heading>
-      {comments?.map(comment => (<Comment key={comment.id} comment={comment} />))}
+      {comments?.map(comment => (<Comment key={comment.id} comment={comment} post_id={post.id} setPost={setPost}/>))}
     </Box>
   );
 }

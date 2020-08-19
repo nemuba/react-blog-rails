@@ -102,7 +102,7 @@ const Reading = () => {
               <Text mt={2}>Comentários {post?.comments?.length} | Curtidas {post?.likes}</Text>
               {isAuthenticated() && user?.id === post?.user?.id ? (
               <>
-                <Dialog handleDelete={handleDelete} id={id}/>
+                <Dialog handleDelete={handleDelete} id={id} title="Excluir Post"/>
                 <Link to={`/post/${id}/edit`}>
                   <IconButton 
                     icon={<FaEdit size={12} 
