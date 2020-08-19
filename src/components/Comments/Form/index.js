@@ -46,7 +46,7 @@ const Form = ({setPost}) => {
           rows={10}
           height="100px"   
           as="textarea" 
-          placeholder="Description" 
+          placeholder="Descrição" 
           onChange={handleChange}
           name="description" value={comment?.description}/>
       </FormControl>

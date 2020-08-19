@@ -14,7 +14,7 @@ const Comments = ({comments, post, setPost}) => {
         (<Link to="/signin"><Text color="blue.600">Faça login para comentar</Text></Link>)
       }
       
-      <Heading fontSize="1.0em" mt={3}>Comments {comments?.length}</Heading>
+      <Heading fontSize="1.0em" mt={3}>Comentários {comments?.length}</Heading>
       {comments?.map(comment => (<Comment key={comment.id} comment={comment} />))}
     </Box>
   );

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Menu, MenuButton, Box, MenuItem, MenuList, MenuDivider, MenuGroup } from '@chakra-ui/core';
+import { Menu, MenuButton, Box, MenuItem, MenuList, MenuDivider, MenuGroup, IconButton } from '@chakra-ui/core';
 import { Link } from 'react-router-dom';
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { isAuthenticated } from './../../services/auth';
+import { FaBlog } from 'react-icons/fa';
 const Navbar = () => {
   return(
     <Box 
@@ -14,41 +15,41 @@ const Navbar = () => {
       borderBottom="1px solid #ddd">
     <Menu>
       <MenuButton fontWeight="bold" fontSize="xl">
-        Blog
+        <IconButton icon={<FaBlog />} mr={3}/> React Blog
       </MenuButton>
       <MenuList>
-        <MenuGroup title={ isAuthenticated() ? "Profile" : "Blog"}>
+        <MenuGroup title={ isAuthenticated() ? "Perfil" : "Blog"}>
         { isAuthenticated() ? (
            <>
            <MenuItem>
-             <Link to="/profile">Account</Link>
+             <Link to="/profile">Minha Conta</Link>
            </MenuItem>
            <MenuItem>
-             <Link to="/logout">Logout</Link>
+             <Link to="/logout">Sair</Link>
            </MenuItem>
            </>
         ) : (
            <MenuItem>
-             <Link to="/signin">Login</Link>
+             <Link to="/signin">Entrar</Link>
            </MenuItem>
         ) }
        
          </MenuGroup>
         <MenuDivider />
-        <MenuGroup title="Pages">
+        <MenuGroup title="Páginas">
         { isAuthenticated() ? (
           <MenuItem>
-            <Link to="/post/new">New Post</Link>
+            <Link to="/post/new">Novo Post</Link>
           </MenuItem>
         ) : null }
           <MenuItem>
             <Link to="/">Posts</Link>
           </MenuItem>
           <MenuItem>
-            <Link to="/about">About</Link>
+            <Link to="/about">Sobre</Link>
           </MenuItem>
           <MenuItem>
-            <Link to="/contact">Contact</Link>
+            <Link to="/contact">Contato</Link>
           </MenuItem>
         </MenuGroup>
       </MenuList>

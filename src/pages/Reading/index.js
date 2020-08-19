@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import MainLayout from '../../components/MainLayout';
 import { Heading, Container, Box, Text, Tag, Flex, IconButton, useToast } from '@chakra-ui/core';
 import { useParams, useHistory } from 'react-router-dom';
 import api from '../../services/api';
 import { Link } from 'react-router-dom';
-import { FaHome, FaHeart, FaHeartBroken} from 'react-icons/fa';
+import { FaHome, FaHeart, FaHeartBroken, FaTrash, FaEdit} from 'react-icons/fa';
 import Comments from '../../components/Comments';
 import { isAuthenticated } from '../../services/auth';
+import AuthContext from './../../contexts/auth';
 
 const Reading = () => {
 
@@ -14,12 +15,22 @@ const Reading = () => {
   const [post, setPost] = useState({});
   const toast = useToast();
   const history = useHistory();
+  const {user} = useContext(AuthContext);
+
+  const handleDelete = (id) =>{
+    api.delete(`/posts/${id}`)
+    .then(response => {
+      toast({title: "Post", description:"Excluido", status:"success",position: "top-right", duration: 2000, isClosable:true})
+      history.push("/");
+    })
+    .catch(()=> toast({title: "Post", description:"Não foi possivel excluir!", status:"error",isClosable: true, duration: 2000}))
+  }
 
   useEffect(()=>{
     const loadPost = () =>{
       api.get(`/posts/${id}`)
       .then(response=> setPost(response.data))
-      .catch(error => {
+      .catch(() => {
         toast({title: "Dados não encontrados !", status:"error",isClosable: true, duration: 2000});
         history.push("/");
       });
@@ -69,7 +80,8 @@ const Reading = () => {
         </Box>
         <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #aaa" shadow="md" borderRadius="5px">
           <Heading my={2}>{post?.title}</Heading>
-          <Tag color="blue.300">Autor {post?.user?.username} - {post?.user?.name}</Tag>
+          <Tag size="md" color="blue.100" bgColor="blue.600">Autor {post?.user?.username} - {post?.user?.name}</Tag>
+          
           <Box maxW="960px" mt={3}>
             <Text>{post?.body}</Text>
           </Box>
@@ -81,11 +93,32 @@ const Reading = () => {
                     icon={post?.liked ? <FaHeart fill="red"/> : <FaHeartBroken fill="yellow"/>} 
                     onClick={handleLike}
                   />
-                  <Text m={3}>{post?.liked ? "you liked" : ""}</Text>
+                  <Text m={3}>{post?.liked ? "Curtiu" : ""}</Text>
                 </>
-              ):(<Link to="/signin"><Text color="blue.600">Faça login para comentar</Text></Link>)}
+              ):(<Link to="/signin"><Text color="blue.600">Faça login pra dar like</Text></Link>)}
             </Box>
-            <Box as="span" mt={4}>Comentários {post?.comments?.length} | Likes {post?.likes}</Box>
+            <Box as="span" mt={4} display="flex">
+              <Text mt={2}>Comentários {post?.comments?.length} | Curtidas {post?.likes}</Text>
+              {isAuthenticated() && user?.id === post?.user?.id ? (
+              <>
+                <IconButton 
+                  onClick={()=> handleDelete(id)} 
+                  variant="outline" 
+                  mx={2} 
+                  color="white.600"
+                  icon={<FaTrash size={12} fill="red"/>}
+                />
+                <Link to={`/post/${id}/edit`}>
+                  <IconButton 
+                    icon={<FaEdit size={12} 
+                    fill="green"/>} 
+                    variant="outline" 
+                    p={0}
+                  />
+                </Link>
+              </>
+            ) : null}
+            </Box>
           </Flex>
         </Box>
         <Comments comments={post?.comments} post={post} setPost={setPost}/>

@@ -13,6 +13,8 @@ const PostEdit = () => {
   const history = useHistory();
   const {id} = useParams();
 
+
+
   useEffect(()=>{
     api.get(`/posts/${id}`)
     .then(response => setPost(response.data))
@@ -57,9 +59,9 @@ const PostEdit = () => {
         </Box>
         <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #aaa" shadow="md" borderRadius="5px">
           <Heading my={2}>Editar Post</Heading>
-          <Tag color="blue.300">Autor {post?.user?.name} </Tag>
-          <Tag color="red.300" ml={2}>Likes {post?.likes} </Tag>
-          <Tag color="green.300" ml={2}>Comments {post?.comments?.length} </Tag>
+          <Tag color="blue.100" bgColor="blue.600" size="md">Autor {post?.user?.name} </Tag>
+          <Tag color="red.100" bgColor="red.600" size="sm" ml={2}>Curtidas {post?.likes} </Tag>
+          <Tag color="green.100" bgColor="green.600" size="sm" ml={2}>Comentários {post?.comments?.length} </Tag>
           <Box maxW="960px" mt={3} p={2}>
             <form onSubmit={handleSubmit}>
               <Stack spacing={8}>

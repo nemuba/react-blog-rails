@@ -7,7 +7,7 @@ const Home = () => {
   return(
     <MainLayout>
       <Container maxW="lg">
-        <Heading m={3}>Blog Posts</Heading>    
+        <Heading m={3} fontSize="1.5em">Ultímos Posts</Heading>    
         <Posts />
       </Container>  
     </MainLayout>
