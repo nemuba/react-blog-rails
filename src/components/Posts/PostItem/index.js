@@ -12,9 +12,9 @@ const PostItem = ({post}) => {
     <Box p={[5,5,1,5]} flex="1 1 960px" mb={3} shadow="md" borderWidth="1px" width="960px" borderRadius="5px">
       <Heading fontSize="xl">
         <Link to={`/post/${post.id}`}>{post.title}</Link>
-        <Tag size="sm" m={1} color="blue.100" bgColor="blue.600">{post.created_at}</Tag>
+        <Tag size="sm" m={1} bgColor="grey.600">{post.created_at}</Tag>
       </Heading>
-      <Text my={4}>{post.body}</Text>
+      <Text my={4}>{post.body.slice(1,200)} ...</Text>
       <Link 
         to={`/post/${post.id}`} 
         style={{textDecoration: "underline"}}> 

@@ -1,12 +1,14 @@
 import React from 'react';
 import Navbar from '../Navbar';
-import { Container } from '@chakra-ui/core';
+import { Container, Box } from '@chakra-ui/core';
 
 
 const MainLayout = ({children}) => {
   return (
     <React.Fragment>
-      <Navbar />
+      <Box width="100%">
+        <Navbar />
+      </Box>
       <Container  maxW="lg" centerContent p={3}>
           {children}
       </Container>

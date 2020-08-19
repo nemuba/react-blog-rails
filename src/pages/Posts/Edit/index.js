@@ -57,7 +57,7 @@ const PostEdit = () => {
             <IconButton icon={<FaHome />} />
           </Link>
         </Box>
-        <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #aaa" shadow="md" borderRadius="5px">
+        <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
           <Heading my={2}>Editar Post</Heading>
           <Tag color="blue.100" bgColor="blue.600" size="md">Autor {post?.user?.name} </Tag>
           <Tag color="red.100" bgColor="red.600" size="sm" ml={2}>Curtidas {post?.likes} </Tag>
@@ -87,7 +87,7 @@ const PostEdit = () => {
                 />
               </FormControl>
               <FormControl>
-                <Button variant="outline" type="submit">
+                <Button variant="outline" type="submit" colorScheme="green">
                   Atualizar
                 </Button>
               </FormControl>

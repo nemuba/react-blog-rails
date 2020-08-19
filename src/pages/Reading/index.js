@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import MainLayout from '../../components/MainLayout';
 import { Heading, Container, Box, Text, Tag, Flex, IconButton, useToast } from '@chakra-ui/core';
-import { useParams, useHistory } from 'react-router-dom';
-import api from '../../services/api';
-import { Link } from 'react-router-dom';
 import { FaHome, FaHeart, FaHeartBroken, FaTrash, FaEdit} from 'react-icons/fa';
+import { useParams, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import MainLayout from '../../components/MainLayout';
 import Comments from '../../components/Comments';
+import Dialog from './../../components/Dialog';
+import api from '../../services/api';
 import { isAuthenticated } from '../../services/auth';
 import AuthContext from './../../contexts/auth';
 
@@ -76,11 +77,11 @@ const Reading = () => {
         <Box mt={2} pl={2} maxW="960px">
           <Link to="/">
             <IconButton icon={<FaHome />} />
-          </Link>
+          </Link>          
         </Box>
-        <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #aaa" shadow="md" borderRadius="5px">
+        <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
           <Heading my={2}>{post?.title}</Heading>
-          <Tag size="md" color="blue.100" bgColor="blue.600">Autor {post?.user?.username} - {post?.user?.name}</Tag>
+          <Tag size="md" color="blue.100" bgColor="blue.600">Criado por {post?.user?.name}</Tag>
           
           <Box maxW="960px" mt={3}>
             <Text>{post?.body}</Text>
@@ -101,13 +102,7 @@ const Reading = () => {
               <Text mt={2}>Comentários {post?.comments?.length} | Curtidas {post?.likes}</Text>
               {isAuthenticated() && user?.id === post?.user?.id ? (
               <>
-                <IconButton 
-                  onClick={()=> handleDelete(id)} 
-                  variant="outline" 
-                  mx={2} 
-                  color="white.600"
-                  icon={<FaTrash size={12} fill="red"/>}
-                />
+                <Dialog handleDelete={handleDelete} id={id}/>
                 <Link to={`/post/${id}/edit`}>
                   <IconButton 
                     icon={<FaEdit size={12} 

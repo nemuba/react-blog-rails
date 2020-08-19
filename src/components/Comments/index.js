@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const Comments = ({comments, post, setPost}) => {
   return(
-    <Box maxW="960px" mt={3} p={8} border="1px solid #aaa" borderRadius="5px">
+    <Box maxW="960px" mt={3} p={8} border="1px solid #ddd" borderRadius="5px">
       <Heading mb={3} fontSize="1.5em">Criar comentário</Heading>
       { isAuthenticated() ? 
         (<Form post={post} setPost={setPost}/>) : 

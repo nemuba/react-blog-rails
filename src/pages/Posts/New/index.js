@@ -51,12 +51,12 @@ const PostNew = () => {
             <IconButton icon={<FaHome />} />
           </Link>
         </Box>
-        <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #aaa" shadow="md" borderRadius="5px">
+        <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
           <Heading my={2}>Criar Post</Heading>
-          <Tag color="blue.300">Autor {user?.name} </Tag>
+          <Tag color="blue.100" bgColor="blue.600" size="md">Autor {user?.name} </Tag>
           <Box maxW="960px" mt={3} p={2}>
             <form onSubmit={handleSubmit}>
-              <Stack spacing={8}>
+              <Stack spacing={6}>
               <FormControl>
                 <FormLabel>Titulo</FormLabel>
                 <Input 
@@ -77,7 +77,7 @@ const PostNew = () => {
                 />
               </FormControl>
               <FormControl>
-                <Button variant="outline" type="submit">
+                <Button variant="outline" type="submit" colorScheme="blue">
                   Criar
                 </Button>
               </FormControl>
