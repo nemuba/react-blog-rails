@@ -9,6 +9,7 @@ import Dialog from './../../components/Dialog';
 import api from '../../services/api';
 import { isAuthenticated } from '../../services/auth';
 import AuthContext from './../../contexts/auth';
+import Loading from 'react-loading';
 
 const Reading = () => {
 
@@ -105,6 +106,7 @@ const Reading = () => {
             <IconButton icon={<FaHome />} />
           </Link> / Lendo          
         </Box>
+        {post?.title != null ? (
         <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
           <Heading my={2}>{post?.title}</Heading>
           <Tag size="sm" m={1} bgColor="purple.600">{post?.categories?.map(c => c.description).join(", ")}</Tag>
@@ -145,9 +147,14 @@ const Reading = () => {
             </Box>
           </Flex>
         </Box>
+        ) : (
+          <Flex align="center" justify="center">
+            <Loading type={"spin"} color={"white"} height={200} width={200}/>
+          </Flex>
+        )}
         <Comments comments={post?.comments} post={post} setPost={setPost}/>
       </Container>  
-    </MainLayout>
+    </MainLayout>         
   );
 }
 

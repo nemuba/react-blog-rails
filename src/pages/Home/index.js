@@ -3,6 +3,7 @@ import MainLayout from '../../components/MainLayout';
 import { Heading, Container } from '@chakra-ui/core';
 import Posts from './../../components/Posts';
 
+
 const Home = () => {
   
   return(
@@ -11,6 +12,7 @@ const Home = () => {
         <Heading m={3} fontSize="1.5em">Ultímos Posts</Heading>    
         <Posts />
       </Container>  
+      
     </MainLayout>
   );
 }

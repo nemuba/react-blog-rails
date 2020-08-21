@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from '../../../components/MainLayout';
-import { Text, Heading, Container, Box, Tag, IconButton, useToast, FormControl, Input, FormLabel, Stack, Button } from '@chakra-ui/core';
+import { Flex, Heading, Container, Box, Tag, IconButton, useToast, FormControl, Input, FormLabel, Stack, Button } from '@chakra-ui/core';
 import { Redirect, useHistory, Link, useParams } from 'react-router-dom';
 import api from '../../../services/api';
 import { FaHome } from 'react-icons/fa';
 import { isAuthenticated } from '../../../services/auth';
 import Categories from '../../../components/Categories';
+import Loading from 'react-loading';
+
 
 const PostEdit = () => {
 
@@ -37,7 +39,7 @@ const PostEdit = () => {
     });
     }
     getPost();
-  },[id]);
+  },[id, toast]);
 
 
   useEffect(()=>{
@@ -91,6 +93,7 @@ const PostEdit = () => {
             <IconButton icon={<FaHome />} />
           </Link> / Editar Post
         </Box>
+        {post?.title != null ? (
         <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
           <Heading my={2}>Editar Post</Heading>
           <Tag color="blue.100" bgColor="blue.600" size="md">Autor {post?.user?.name} </Tag>
@@ -136,7 +139,12 @@ const PostEdit = () => {
               </Stack>
             </form>
           </Box>
-        </Box>
+        </Box>)
+          : (
+          <Flex align="center" justify="center">
+            <Loading type={"spin"} color={"white"} height={200} width={200}/>
+          </Flex>
+        )}
       </Container>  
     </MainLayout>
     ) : (
