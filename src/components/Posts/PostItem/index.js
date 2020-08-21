@@ -10,10 +10,10 @@ const PostItem = ({post}) => {
   
   return(
     <Box p={[5,5,1,5]} flex="1 1 960px" mb={3} shadow="md" borderWidth="1px" width="960px" borderRadius="5px">
-      <Heading fontSize="xl">
-        <Link to={`/post/${post.id}`}>{post.title}</Link>
-        <Tag size="sm" m={1} bgColor="grey.600">{post.created_at}</Tag>
+      <Heading size="lg">
+        <Link to={`/post/${post.id}`}>{post.title}</Link>        
       </Heading>
+      <Tag size="sm" m={1} bgColor="purple.600">{post.categories?.map(c => c.description).join(", ")}</Tag>
       <Text my={4}>{post.body.slice(1,200)} ...</Text>
       <Link 
         to={`/post/${post.id}`} 
@@ -21,10 +21,10 @@ const PostItem = ({post}) => {
           Continue lendo ...
       </Link>
       <Box mt={3} display="flex"  justifyContent="space-between" flexWrap="wrap">
-        <Box as="span" color="gray.600" mr={3}>
+        <Box as="span" color="gray.600" mr={3} mt={3}>
           <Tag color="blue.100" size="md" bgColor="blue.600">Autor {post.user.name}</Tag>
         </Box>    
-        <Box color="gray.600" display="flex">
+        <Box color="gray.600" display="flex" mt={3}>
            <Box mr={3} >
             <Text>{post.liked ? "você curtiu isso" : ""}</Text>
            </Box>
@@ -49,6 +49,7 @@ const PostItem = ({post}) => {
               </Box>
               </>
             ) : null}
+            <Text size="sm" mx={3}>{post.created_at}</Text>
         </Box>
       </Box>
     </Box>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import MainLayout from '../../../components/MainLayout';
 import { Heading, Container, Box, Tag, IconButton, useToast, FormControl, Input, FormLabel, Stack, Button } from '@chakra-ui/core';
 import { Redirect, useHistory, Link } from 'react-router-dom';
@@ -6,10 +6,13 @@ import api from '../../../services/api';
 import { FaHome } from 'react-icons/fa';
 import { isAuthenticated } from '../../../services/auth';
 import AuthContext from './../../../contexts/auth';
+import Categories from '../../../components/Categories';
 
 const PostNew = () => {
 
   const [post, setPost] = useState({});
+  const [category, setCategory] = useState();
+  const [categories, setCategories] = useState([]);
   const toast = useToast();
   const history = useHistory();
   const {user} = useContext(AuthContext);
@@ -18,7 +21,7 @@ const PostNew = () => {
 
   const handleSubmit = (e) =>{
     e.preventDefault();
-    api.post(`/posts`, {post})
+    api.post(`/posts`, {post: {...post, category_ids:[category]}})
       .then( response => {
         setPost(response.data);
         toast({
@@ -43,6 +46,21 @@ const PostNew = () => {
     const {name, value} = e.target;
     setPost({...post,[name]: value});
   }
+
+  useEffect(()=>{
+    const loadCategories = () =>{
+      api.get("/categories")
+      .then(resp =>{
+        if(resp.status === 200){
+          setCategories(resp.data.categories);
+        }
+      })
+      .catch(erro =>{
+        console.log(erro);
+      });
+    }
+    loadCategories();
+  },[]);
   
   return(
     isAuthenticated() ? (
@@ -58,7 +76,8 @@ const PostNew = () => {
           <Tag color="blue.100" bgColor="blue.600" size="md">Autor {user?.name} </Tag>
           <Box maxW="960px" mt={3} p={2}>
             <form onSubmit={handleSubmit}>
-              <Stack spacing={6}>
+              <Stack spacing={6}>              
+              {categories.length ? (<Categories categories={categories} setCategory={setCategory}/>) : null}
               <FormControl>
                 <FormLabel>Titulo</FormLabel>
                 <Input 

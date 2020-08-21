@@ -1,28 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from '../../../components/MainLayout';
-import { Heading, Container, Box, Tag, IconButton, useToast, FormControl, Input, FormLabel, Stack, Button } from '@chakra-ui/core';
+import { Text, Heading, Container, Box, Tag, IconButton, useToast, FormControl, Input, FormLabel, Stack, Button } from '@chakra-ui/core';
 import { Redirect, useHistory, Link, useParams } from 'react-router-dom';
 import api from '../../../services/api';
 import { FaHome } from 'react-icons/fa';
 import { isAuthenticated } from '../../../services/auth';
+import Categories from '../../../components/Categories';
 
 const PostEdit = () => {
 
   const [post, setPost] = useState({});
+  const [category, setCategory] = useState();
+  const [categories, setCategories] = useState([]);
   const toast = useToast();
   const history = useHistory();
   const {id} = useParams();
 
 
   useEffect(()=>{
-    api.get(`/posts/${id}`)
-    .then(response => setPost(response.data))
-    .catch(error => toast({title: "Dados não encontrados !", status:"error",isClosable: true, duration: 2000}))
-  },[id, toast]);
+    const getPost = () =>{
+      api.get(`/posts/${id}`)
+    .then(response => {
+      if(response.status === 200){
+        setPost(response.data);
+        setCategory(response.data.categories.map(c => c.id)[0]);
+      }
+    })
+    .catch(() => {
+      toast({
+        title: 
+        "Dados não encontrados !", 
+        status:"error",
+        isClosable: true, 
+        duration: 2000
+      })
+    });
+    }
+    getPost();
+  },[id]);
+
+
+  useEffect(()=>{
+    const loadCategories = () =>{
+      api.get("/categories")
+      .then(resp =>{
+        if(resp.status === 200){
+          setCategories(resp.data.categories);
+        }
+      })
+      .catch(erro =>{
+        console.log(erro);
+      });
+    }
+    loadCategories();
+  },[]);
 
   const handleSubmit = (e) =>{
     e.preventDefault();
-    api.put(`/posts/${id}`, {post})
+    api.put(`/posts/${id}`, {post: {...post, category_ids:[category]}})
       .then( response => {
         toast({
           title: "Post", 
@@ -64,6 +99,14 @@ const PostEdit = () => {
           <Box maxW="960px" mt={3} p={2}>
             <form onSubmit={handleSubmit}>
               <Stack spacing={8}>
+              {categories.length && post ? 
+                (
+                <Categories 
+                  categories={categories} 
+                  setCategory={setCategory} 
+                  defaultValue={category}/>
+                ) : null
+              }
               <FormControl>
                 <FormLabel>Titulo</FormLabel>
                 <Input 

@@ -21,7 +21,7 @@ const Reading = () => {
   const handleDelete = (id) =>{
     api.delete(`/posts/${id}`)
     .then(response => {
-      if(response.status === 200){
+      if(response.status === 204){
         toast({
           title: "Post", 
           description:"Excluido", 
@@ -107,7 +107,8 @@ const Reading = () => {
         </Box>
         <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
           <Heading my={2}>{post?.title}</Heading>
-          <Tag size="md" color="blue.100" bgColor="blue.600">Criado por {post?.user?.name}</Tag>
+          <Tag size="sm" m={1} bgColor="purple.600">{post?.categories?.map(c => c.description).join(", ")}</Tag>
+          <Tag size="sm" m={1} color="blue.100" bgColor="blue.600">Criado por {post?.user?.name}</Tag>
           
           <Box maxW="960px" mt={3}>
             <Text>{post?.body}</Text>
