@@ -33,8 +33,29 @@ const SignUp = () => {
       });
     }else{
       api.post("/auth/signup",{user: {...form}})
-      .then(()=>history.push('/signin'))
-      .catch(()=> toast({title: "Não foi possivel criar a conta!",status:"error", duration: 2000, isClosable:true, position:"top-right"}))
+      .then((resp)=>{
+        if(resp.status === 201){
+          history.push('/signin');
+        }else if(resp.status === 200){
+          toast({
+            title: "Erro ao criar conta",
+            description: resp.data.join(", "),
+            status: "error",
+            duration: 2000,
+            position: "top-right",
+            isClosable: true
+          });
+        }
+      })
+      .catch(()=> {
+        toast({
+          title: "Não foi possivel criar a conta!",
+          status:"error", 
+          duration: 2000, 
+          isClosable:true, 
+          position:"top-right"
+        })
+      });
     }
   }
 

@@ -21,17 +21,29 @@ const Form = ({setPost}) => {
     setIsLoad(true);
     api.post(`/posts/${id}/comments`, {comment})
     .then(response =>{
-       setPost(response.data);
-       setComment({description: ""});
-       setIsLoad(false);
-       toast({
-         title:"Comentário",
-         description: "Criado com sucesso!",
-         position:"top-right",
-         duration: 9000,
-         isClosable:true,
-         status: "success"
-       });
+       if(response.status === 201){
+        setPost(response.data);
+        setComment({description: ""});
+        setIsLoad(false);
+        toast({
+          title:"Comentário",
+          description: "Criado com sucesso!",
+          position:"top-right",
+          duration: 9000,
+          isClosable:true,
+          status: "success"
+        });
+       }else if(response.status === 200){
+        toast({
+          title:"Comentário",
+          description: response.data.join(", "),
+          position:"top-right",
+          duration: 9000,
+          isClosable:true,
+          status: "error"
+        });
+        setIsLoad(false);
+       }
     })
     .catch(error => console.log(error));
   }

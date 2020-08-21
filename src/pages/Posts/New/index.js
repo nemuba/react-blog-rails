@@ -16,28 +16,41 @@ const PostNew = () => {
   const toast = useToast();
   const history = useHistory();
   const {user} = useContext(AuthContext);
-
+  const [isLoading, setIsLoading] = useState(false);
   
 
   const handleSubmit = (e) =>{
     e.preventDefault();
+    setIsLoading(true);
     api.post(`/posts`, {post: {...post, category_ids:[category]}})
       .then( response => {
-        setPost(response.data);
-        toast({
-          title: "Post", 
-          description: "Criado com sucesso", 
-          status: "success", 
-          duration: 2000, 
-          position: "top-right", 
-          isClosable:true
-        });
-        
-        history.push(`/post/${response.data.id}`);
+        if(response.status === 201){
+          toast({
+            title: "Post", 
+            description: "Criado com sucesso", 
+            status: "success", 
+            duration: 2000, 
+            position: "top-right", 
+            isClosable:true
+          });
+          setIsLoading(false);
+          history.push(`/post/${response.data.id}`);
+        }else if(response.status === 200){
+          toast({
+            title: "Post", 
+            description: response.data.join(", "), 
+            status: "error", 
+            duration: 2000, 
+            position: "top-right", 
+            isClosable:true
+          });
+          setIsLoading(false);
+        }
       })
-      .catch(error => {
+      .catch(() => {
         toast({title: "Dados não encontrados !", status:"error",isClosable: true, duration: 2000});
         history.push("/");
+        setIsLoading(false);
       });
     };
 
@@ -98,7 +111,7 @@ const PostNew = () => {
                 />
               </FormControl>
               <FormControl>
-                <Button variant="outline" type="submit" colorScheme="blue">
+                <Button variant="outline" type="submit" colorScheme="blue" isLoading={isLoading}>
                   Criar
                 </Button>
               </FormControl>

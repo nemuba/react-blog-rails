@@ -17,7 +17,7 @@ const PostEdit = () => {
   const toast = useToast();
   const history = useHistory();
   const {id} = useParams();
-
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(()=>{
     const getPost = () =>{
@@ -59,22 +59,36 @@ const PostEdit = () => {
 
   const handleSubmit = (e) =>{
     e.preventDefault();
+    setIsLoading(true);
     api.put(`/posts/${id}`, {post: {...post, category_ids:[category]}})
       .then( response => {
-        toast({
-          title: "Post", 
-          description: "Atualizado com sucesso", 
-          status: "success", 
-          duration: 2000, 
-          position: "top-right", 
-          isClosable:true
-        });
-        
-        history.push(`/post/${id}`);
+        if(response.status === 202){
+          toast({
+            title: "Post", 
+            description: "Atualizado com sucesso", 
+            status: "success", 
+            duration: 2000, 
+            position: "top-right", 
+            isClosable:true
+          });
+          setIsLoading(false);
+          history.push(`/post/${id}`);
+        }else if(response.status === 200){
+          toast({
+            title: "Post", 
+            description: response.data.join(", "), 
+            status: "error", 
+            duration: 2000, 
+            position: "top-right", 
+            isClosable:true
+          });
+          setIsLoading(false);
+        }
       })
-      .catch(error => {
+      .catch(() => {
+        setIsLoading(false);
         toast({title: "Não foi possivel atualizar !", status:"error",isClosable: true, duration: 2000});
-        history.push("/");
+        history.push(`/post/${id}`);
       });
     };
 
@@ -132,7 +146,7 @@ const PostEdit = () => {
                 />
               </FormControl>
               <FormControl>
-                <Button variant="outline" type="submit" colorScheme="green">
+                <Button variant="outline" type="submit" colorScheme="green" isLoading={isLoading}>
                   Atualizar
                 </Button>
               </FormControl>

@@ -17,6 +17,7 @@ const Reading = () => {
   const [post, setPost] = useState({});
   const toast = useToast();
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   const {user} = useContext(AuthContext);
 
   const handleDelete = (id) =>{
@@ -67,6 +68,7 @@ const Reading = () => {
   },[id, history, toast]);
 
   const handleLike = () =>{
+    setIsLoading(true);
     if(post.liked){
       api.delete(`/posts/${id}/dislike`)
       .then(response => {
@@ -79,8 +81,11 @@ const Reading = () => {
           duration:9000,
           isClosable: true
         });
+        setIsLoading(false);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        setIsLoading(false);
+      });
     }else{
       api.post(`/posts/${id}/like`)
       .then(response => {
@@ -93,8 +98,11 @@ const Reading = () => {
           duration:9000,
           isClosable: true
         });
+        setIsLoading(false);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        setIsLoading(false);
+      });
     }
   }
   
@@ -120,6 +128,7 @@ const Reading = () => {
               { isAuthenticated() ?(
                 <>
                   <IconButton
+                    isLoading={isLoading}
                     size="sm" 
                     icon={post?.liked ? <FaHeart fill="red"/> : <FaHeartBroken fill="yellow"/>} 
                     onClick={handleLike}

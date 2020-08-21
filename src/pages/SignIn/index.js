@@ -43,6 +43,8 @@ const SignIn = () => {
             duration: 9000,
             isClosable: true
           });
+        }else{
+          console.log(resp);
         }
       })
       .catch(()=>{
