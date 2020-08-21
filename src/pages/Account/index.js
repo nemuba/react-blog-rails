@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Box, Container, Stack, FormControl, Input, Heading, Button, toast, useToast } from '@chakra-ui/core';
+import { Box, Container, Stack, FormControl, Input, Heading, Button, useToast } from '@chakra-ui/core';
 import MainLayout from './../../components/MainLayout';
 import api from './../../services/api';
 import AuthContext from './../../contexts/auth';

@@ -4,6 +4,7 @@ import { Heading, Container } from '@chakra-ui/core';
 import Posts from './../../components/Posts';
 
 const Home = () => {
+  
   return(
     <MainLayout>
       <Container maxW="lg">

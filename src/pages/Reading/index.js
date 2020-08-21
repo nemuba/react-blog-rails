@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Heading, Container, Box, Text, Tag, Flex, IconButton, useToast } from '@chakra-ui/core';
-import { FaHome, FaHeart, FaHeartBroken, FaTrash, FaEdit} from 'react-icons/fa';
+import { FaHome, FaHeart, FaHeartBroken, FaEdit} from 'react-icons/fa';
 import { useParams, useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
@@ -21,18 +21,44 @@ const Reading = () => {
   const handleDelete = (id) =>{
     api.delete(`/posts/${id}`)
     .then(response => {
-      toast({title: "Post", description:"Excluido", status:"success",position: "top-right", duration: 2000, isClosable:true})
-      history.push("/");
+      if(response.status === 200){
+        toast({
+          title: "Post", 
+          description:"Excluido", 
+          status:"success",
+          position: "top-right",
+          duration: 2000, 
+          isClosable:true
+        });
+        history.push("/");
+      }
     })
-    .catch(()=> toast({title: "Post", description:"Não foi possivel excluir!", status:"error",isClosable: true, duration: 2000}))
+    .catch(()=> {
+      toast({
+        title: "Post", 
+        description:"Não foi possivel excluir!", 
+        status:"error",
+        isClosable: true, 
+        duration: 2000
+      });
+    });
   }
-
+  
   useEffect(()=>{
     const loadPost = () =>{
       api.get(`/posts/${id}`)
-      .then(response=> setPost(response.data))
+      .then(response=> {
+        if(response.status === 200){
+         setPost(response.data);
+        }
+      })
       .catch(() => {
-        toast({title: "Dados não encontrados !", status:"error",isClosable: true, duration: 2000});
+        toast({
+          title: "Dados não encontrados !", 
+          status:"error",
+          isClosable: true, 
+          duration: 2000
+        });
         history.push("/");
       });
     };
@@ -86,25 +112,27 @@ const Reading = () => {
           <Box maxW="960px" mt={3}>
             <Text>{post?.body}</Text>
           </Box>
-          <Flex maxW="960px" mt={3} p={2}>
-            <Box as="span" flex="1 1 20px" display="flex">
+          <Flex maxW="960px" mt={3} p={2} flexWrap="wrap">
+            <Box as="span" mt={3} flex="1 1 200px" display="flex">
               { isAuthenticated() ?(
                 <>
-                  <IconButton 
+                  <IconButton
+                    size="sm" 
                     icon={post?.liked ? <FaHeart fill="red"/> : <FaHeartBroken fill="yellow"/>} 
                     onClick={handleLike}
                   />
-                  <Text m={3}>{post?.liked ? "Curtiu" : ""}</Text>
+                  <Text m={1}>{post?.liked ? "Curtiu" : ""}</Text>
                 </>
               ):(<Link to="/signin"><Text color="blue.600">Faça login pra dar like</Text></Link>)}
             </Box>
-            <Box as="span" mt={4} display="flex">
+            <Box as="span" mt={3} display="flex" flexWrap="wrap">
               <Text mt={2}>Comentários {post?.comments?.length} | Curtidas {post?.likes}</Text>
               {isAuthenticated() && user?.id === post?.user?.id ? (
               <>
-                <Dialog handleDelete={handleDelete} id={id} title="Excluir Post"/>
+                <Dialog handleDelete={handleDelete} id={id} title="Excluir Post" size="sm" />
                 <Link to={`/post/${id}/edit`}>
-                  <IconButton 
+                  <IconButton
+                    size="sm" 
                     icon={<FaEdit size={12} 
                     fill="green"/>} 
                     variant="outline" 

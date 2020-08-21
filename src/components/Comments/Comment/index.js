@@ -45,10 +45,11 @@ const Comment = ({comment, post_id, setPost}) => {
         color="gray.600"
         display="flex"
         justifyContent="space-between"
+        flexWrap="wrap"
       >
-        <Text color="grey.600">Criado em {comment.created_at}</Text>
+        <Text color="grey.600" mt={3}>Criado em {comment.created_at}</Text>
         {comment?.user?.id === user?.id ? (
-          <Dialog handleDelete={handleDeleteComment} id={post_id} title={"Excluir comentário"}/>
+          <Dialog handleDelete={handleDeleteComment} id={post_id} title={"Excluir comentário"} size="sm"/>
         ) : null}
       </Box>
     </Box>

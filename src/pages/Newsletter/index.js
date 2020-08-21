@@ -1,6 +1,6 @@
 import React from 'react';
-import { Heading, Container, Box, Text, Tag, Flex, IconButton, Image, FormLabel, Input, FormControl, Stack, Button } from '@chakra-ui/core';
-import { FaHome, FaHeart, FaHeartBroken, FaEdit, FaNewspaper} from 'react-icons/fa';
+import { Heading, Container, Box, Text, IconButton, FormLabel, Input, FormControl, Stack, Button } from '@chakra-ui/core';
+import { FaHome, FaNewspaper} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 
@@ -15,8 +15,8 @@ const Newsletter = () => {
             <IconButton icon={<FaHome />} />
           </Link> / Newsletter          
         </Box>
-        <Box maxW="960px" my={8} display="flex" border="1px solid #ddd" shadow="md" borderRadius="5px" p={5}>
-            <Box maxW="200px" flexShrink={0}>
+        <Box maxW="960px" my={8} display="flex" border="1px solid #ddd" shadow="md" borderRadius="5px" p={5} flexWrap="wrap" justifyContent="center">
+            <Box maxW="200px">
               <FaNewspaper size={126} />
             </Box>
             <Box flex="1 1 700px" p={3} ml={3}> 

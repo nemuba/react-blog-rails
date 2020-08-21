@@ -8,20 +8,6 @@ const AuthContext = createContext({});
 export const AuthProvider = ({children}) => {
 
   const [user, setUser] = useState({})
-  
-
-  const signIn = async (form) =>{
-    api.post("/auth/signin", {auth: {...form}})
-    .then(response=> {
-      const {jwt} = response.data;
-      login(jwt);
-      loadCurrentUser();
-    })
-    .catch(e => {
-      console.log(e);
-    });
-
-  }
 
   const logOut = ()=>{
     setUser({});
@@ -42,7 +28,7 @@ export const AuthProvider = ({children}) => {
 
 
   return(
-    <AuthContext.Provider value={{user, signIn, logOut, loadCurrentUser}}>
+    <AuthContext.Provider value={{user, logOut, loadCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );

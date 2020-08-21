@@ -14,6 +14,8 @@ const PostNew = () => {
   const history = useHistory();
   const {user} = useContext(AuthContext);
 
+  
+
   const handleSubmit = (e) =>{
     e.preventDefault();
     api.post(`/posts`, {post})

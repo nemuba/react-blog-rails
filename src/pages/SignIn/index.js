@@ -3,16 +3,17 @@ import { Container, Box, Stack, Input, FormControl, FormLabel, Heading, Button }
 import {Link, useHistory} from 'react-router-dom';
 import { useToast } from '@chakra-ui/core';
 import MainLayout from '../../components/MainLayout';
-import {isAuthenticated} from './../../services/auth';
+import {isAuthenticated, login} from './../../services/auth';
 import { Redirect } from 'react-router-dom';
-import AuthContext from '../../contexts/auth';
+import api from '../../services/api';
+import AuthContext from './../../contexts/auth';
 
 const SignIn = () => {
 
   const [form, setForm] = useState({email: "", password: ""});
   const toast = useToast();
-  const auth  = useContext(AuthContext);
   const history = useHistory();
+  const {loadCurrentUser} = useContext(AuthContext);  
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
@@ -29,16 +30,33 @@ const SignIn = () => {
         isClosable: true
       });
     }else{
-      await auth.signIn(form);
-      toast({
-        title: "Login",
-        description: "Logado com sucesso!",
-        status: "success",
-        position: "top-right",
-        duration: 9000,
-        isClosable: true
+      api.post("/auth/signin", {auth: {...form}})
+      .then(resp => {
+        if(resp.status === 201){
+          login(resp.data.jwt);
+          history.push("/");
+          toast({
+            title: "Login",
+            description: "Logado com sucesso",
+            status: "success",
+            position: "top-right",
+            duration: 9000,
+            isClosable: true
+          });
+        }
+      })
+      .catch(()=>{
+        toast({
+          title: "Login",
+          description: "Email ou senha inválidos",
+          status: "error",
+          position: "top-right",
+          duration: 9000,
+          isClosable: true
+        });
+      }).finally(()=>{
+        loadCurrentUser();
       });
-      history.push("/");
     }
   }
 
@@ -50,8 +68,8 @@ const SignIn = () => {
 
   return( !isAuthenticated() ?
     (<MainLayout>
-      <Container>
-        <Box mt={3} p={3} shadow="md" borderWidth="1px" bg="blue" height="380px" borderRadius="5px">
+      <Container maxW="md">
+        <Box mt={3} p={6} shadow="md" borderWidth="1px" bg="blue"  borderRadius="5px">
           <form onSubmit={handleSubmit}>
             <Box my={5} display="flex" justifyContent="start">
               <Heading>Login</Heading>

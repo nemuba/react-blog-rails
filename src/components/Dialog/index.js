@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -14,7 +14,7 @@ import {
 import { FaTrash } from 'react-icons/fa';
 // import { Container } from './styles';
 
-function Dialog({title,handleDelete, id}) {
+function Dialog({title,handleDelete, id, ...rest}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleClose = () => {
@@ -23,11 +23,11 @@ function Dialog({title,handleDelete, id}) {
   }
   return (
     <>
-      <Button onClick={onOpen} variant="outline" mx={2}>
-        <FaTrash fill="red" size={12}/>
+      <Button onClick={onOpen} variant="outline" mx={2} {...rest} >
+        <FaTrash fill="red" size={10}/>
       </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
         <ModalOverlay>
           <ModalContent>
             <ModalHeader>{title}</ModalHeader>
@@ -37,7 +37,7 @@ function Dialog({title,handleDelete, id}) {
             </ModalBody>
 
             <ModalFooter>
-              <Button variant="outline" colorScheme="red.600" mr={3} onClick={handleClose}>
+              <Button variant="outline" colorScheme="blue" mr={3} onClick={handleClose}>
                 Ok
               </Button>
               <Button variant="ghost" onClick={onClose}>Cancelar</Button>

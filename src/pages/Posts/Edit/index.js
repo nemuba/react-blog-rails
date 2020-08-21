@@ -14,7 +14,6 @@ const PostEdit = () => {
   const {id} = useParams();
 
 
-
   useEffect(()=>{
     api.get(`/posts/${id}`)
     .then(response => setPost(response.data))

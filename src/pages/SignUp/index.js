@@ -11,6 +11,7 @@ const SignUp = () => {
   const toast = useToast();
   const history = useHistory();
 
+
   const handleChangeInput = (e) =>{
     const {name, value} = e.target;
     setForm({...form, [name]: value});
@@ -39,8 +40,8 @@ const SignUp = () => {
 
   return(
     <MainLayout>
-      <Container>
-        <Box mt={3} p={3} shadow="md" borderWidth="1px" bg="blue" borderRadius="5px">
+      <Container maxW="md">
+        <Box mt={3} p={6} shadow="md" borderWidth="1px" bg="blue" borderRadius="5px">
           <form onSubmit={handleSubmit}>
             <Box my={5} display="flex" justifyContent="start">
               <Heading>Criar conta</Heading>

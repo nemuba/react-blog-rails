@@ -20,7 +20,7 @@ const PostItem = ({post}) => {
         style={{textDecoration: "underline"}}> 
           Continue lendo ...
       </Link>
-      <Box mt={3} display="flex"  justifyContent="space-between">
+      <Box mt={3} display="flex"  justifyContent="space-between" flexWrap="wrap">
         <Box as="span" color="gray.600" mr={3}>
           <Tag color="blue.100" size="md" bgColor="blue.600">Autor {post.user.name}</Tag>
         </Box>    

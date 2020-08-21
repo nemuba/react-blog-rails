@@ -1,6 +1,6 @@
 import React from 'react';
-import { Heading, Container, Box, Text, Tag, Flex, IconButton, Image, Stack } from '@chakra-ui/core';
-import { FaHome, FaHeart, FaHeartBroken, FaEdit, FaInfo} from 'react-icons/fa';
+import { Heading, Container, Box, Text,  IconButton } from '@chakra-ui/core';
+import { FaHome,  FaInfo} from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 
@@ -16,8 +16,8 @@ const About = () => {
           </Link> / Sobre         
         </Box>
         <Box mt={8} px={8} pt={8} pb={2} maxW="960px" border="1px solid #ddd" shadow="md" borderRadius="5px">
-          <Box maxW="960px" my={8} display="flex">
-            <Box><FaInfo size={126} /></Box>
+          <Box maxW="960px" my={4} display="flex" flexWrap="wrap" justifyContent="center">
+            <Box m={5}><FaInfo size={126} /></Box>
             <Box flex="1 1 700px" p={3} ml={3}> 
               <Heading>Sobre</Heading>
               <Text>
