@@ -24,7 +24,7 @@ const Posts = () => {
     </Flex>
   ) : (
     <Flex align="center" justify="center">
-      <Loading type={"spin"} color={"white"} height={667} width={375}/>
+      <Loading type={"spin"} color="#0030aa" height={667} width={375}/>
     </Flex>
   );
 }

@@ -130,8 +130,10 @@ const Reading = () => {
                   <IconButton
                     isLoading={isLoading}
                     size="sm" 
-                    icon={post?.liked ? <FaHeart fill="red"/> : <FaHeart fill="white"/>} 
+                    icon={post?.liked ? <FaHeart fill="red"/> : <FaHeart fill="#0030aa"/>} 
                     onClick={handleLike}
+                    variant="outline"
+                    colorScheme="blue"
                   />
                   <Text m={1}>{post?.liked ? "Curtiu" : ""}</Text>
                 </>
@@ -158,7 +160,7 @@ const Reading = () => {
         </Box>
         ) : (
           <Flex align="center" justify="center">
-            <Loading type={"spin"} color={"white"} height={200} width={200}/>
+            <Loading type={"spin"} color={"#0030aa"} height={200} width={200}/>
           </Flex>
         )}
         <Comments comments={post?.comments} post={post} setPost={setPost}/>
