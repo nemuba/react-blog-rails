@@ -11,7 +11,7 @@ const Comment = ({comment, post_id, setPost}) => {
   const handleDeleteComment = (id) =>{
     api.delete(`/posts/${id}/comments/${comment.id}`)
     .then(response=> {
-      if(response.status === 200){
+      if(response.status === 202){
       toast({
         title:"Comentário",
         description: "Excluido com sucesso!",
