@@ -20,12 +20,12 @@ const PostItem = ({post}) => {
         style={{textDecoration: "underline"}}> 
           Continue lendo ...
       </Link>
-      <Box mt={3} display="flex"  justifyContent="space-between" flexWrap="wrap">
+      <Box mt={3} display="flex"  justifyContent="space-between" flexWrap="wrap" maxW="960px">
         <Box as="span" color="gray.600" mr={3} mt={3}>
           <Tag color="blue.100" size="md" bgColor="blue.600">Autor {post.user.name}</Tag>
         </Box>    
-        <Box color="gray.600" display="flex" mt={3}>
-           <Box mr={3} >
+        <Box color="gray.600" display="flex" mt={3} flexWrap="wrap">
+           <Box mr={3}>
             <Text>{post.liked ? "você curtiu isso" : ""}</Text>
            </Box>
            <Box mt={1} >

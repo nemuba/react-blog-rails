@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Heading, Container, Box, Text, Tag, Flex, IconButton, useToast } from '@chakra-ui/core';
-import { FaHome, FaHeart, FaHeartBroken, FaEdit} from 'react-icons/fa';
+import { FaHome, FaHeart, FaEdit} from 'react-icons/fa';
 import { useParams, useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
@@ -130,7 +130,7 @@ const Reading = () => {
                   <IconButton
                     isLoading={isLoading}
                     size="sm" 
-                    icon={post?.liked ? <FaHeart fill="red"/> : <FaHeartBroken fill="yellow"/>} 
+                    icon={post?.liked ? <FaHeart fill="red"/> : <FaHeart fill="white"/>} 
                     onClick={handleLike}
                   />
                   <Text m={1}>{post?.liked ? "Curtiu" : ""}</Text>
