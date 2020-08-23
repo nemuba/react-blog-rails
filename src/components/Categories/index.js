@@ -17,7 +17,7 @@ const Categories = ({categories, setCategory, defaultValue}) => {
   return(
     <FormControl colorScheme="green">
       <FormLabel>Categoria</FormLabel>
-      <Select placeholder="Selecione" onChange={(e)=> handleChange(e)} defaultValue={selected}>
+      <Select placeholder="Selecione" name="category_ids" onChange={(e)=> handleChange(e)} defaultValue={selected}>
       {categories.map(category=> (<CategoryItem key={category.id} category={category}/>))}
       </Select>
     </FormControl>

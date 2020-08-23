@@ -1,28 +1,44 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import MainLayout from '../../../components/MainLayout';
-import { Heading, Container, Box, Tag, IconButton, useToast, FormControl, Input, FormLabel, Stack, Button } from '@chakra-ui/core';
+import { Heading, Container, Box, Tag, IconButton, useToast, FormControl, FormLabel, Stack, Button } from '@chakra-ui/core';
 import { Redirect, useHistory, Link } from 'react-router-dom';
 import api from '../../../services/api';
 import { FaHome } from 'react-icons/fa';
 import { isAuthenticated } from '../../../services/auth';
 import AuthContext from './../../../contexts/auth';
-import Categories from '../../../components/Categories';
+import { Form } from '@unform/web';
+import Input from './../../../components/common/Input';
+import Select from './../../../components/common/Select';
+
 
 const PostNew = () => {
 
-  const [post, setPost] = useState({});
-  const [category, setCategory] = useState();
+ 
   const [categories, setCategories] = useState([]);
   const toast = useToast();
   const history = useHistory();
   const {user} = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const formRef = useRef(null);
 
-  const handleSubmit = (e) =>{
-    e.preventDefault();
+
+  const handleSubmit = async (data) =>{
+    const {title, body, category_ids} = data;
     setIsLoading(true);
-    api.post(`/posts`, {post: {...post, category_ids:[category]}})
+
+    console.log(data);
+
+    if(!category_ids.length || !title || !body){
+
+      formRef.current.setErrors({
+        title: !title ? 'Titulo requerido' : '',
+        body: !body ? 'Descrição requerida' : '',
+        category_ids: !category_ids.length ? 'Selecione': ''
+      });
+
+      setIsLoading(false);
+    }else{
+    await api.post(`/posts`, {post: {...data }})
       .then( response => {
         if(response.status === 201){
           toast({
@@ -52,13 +68,10 @@ const PostNew = () => {
         history.push("/");
         setIsLoading(false);
       });
+    }
     };
 
-
-  const handleChange = (e) =>{
-    const {name, value} = e.target;
-    setPost({...post,[name]: value});
-  }
+ 
 
   useEffect(()=>{
     const loadCategories = () =>{
@@ -88,15 +101,20 @@ const PostNew = () => {
           <Heading my={2}>Criar Post</Heading>
           <Tag color="blue.100" bgColor="blue.600" size="md">Autor {user?.name} </Tag>
           <Box maxW="960px" mt={3} p={2}>
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} ref={formRef}>
               <Stack spacing={6}>              
-              {categories.length ? (<Categories categories={categories} setCategory={setCategory}/>) : null}
+              <FormControl>
+                <FormLabel>Categorias</FormLabel>
+                <Select 
+                  name="category_ids" 
+                  isMulti options={categories?.map(c=>({value: c.id, label: c.description})) } 
+                />
+              </FormControl>
               <FormControl>
                 <FormLabel>Titulo</FormLabel>
                 <Input 
                   placeholder="Titulo" 
                   name="title" 
-                  onChange={handleChange}
                 />
               </FormControl>
               <FormControl>
@@ -107,7 +125,6 @@ const PostNew = () => {
                   p={3} 
                   placeholder="Descrição" 
                   name="body" 
-                  onChange={handleChange}
                 />
               </FormControl>
               <FormControl>
@@ -116,7 +133,7 @@ const PostNew = () => {
                 </Button>
               </FormControl>
               </Stack>
-            </form>
+            </Form>
           </Box>
         </Box>
       </Container>  

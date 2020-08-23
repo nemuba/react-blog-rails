@@ -1,37 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MainLayout from '../../../components/MainLayout';
-import { Flex, Heading, Container, Box, Tag, IconButton, useToast, FormControl, Input, FormLabel, Stack, Button } from '@chakra-ui/core';
+import { Flex, Heading, Container, Box, Tag, IconButton, useToast, FormControl, FormLabel, Stack, Button } from '@chakra-ui/core';
 import { Redirect, useHistory, Link, useParams } from 'react-router-dom';
 import api from '../../../services/api';
 import { FaHome } from 'react-icons/fa';
 import { isAuthenticated } from '../../../services/auth';
-import Categories from '../../../components/Categories';
 import Loading from 'react-loading';
+import { Form } from '@unform/web';
+import Input from './../../../components/common/Input';
+import Select from './../../../components/common/Select';
 
 
 const PostEdit = () => {
 
   const [post, setPost] = useState({});
-  const [category, setCategory] = useState();
   const [categories, setCategories] = useState([]);
   const toast = useToast();
   const history = useHistory();
   const {id} = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef(null);
 
   useEffect(()=>{
     const getPost = () =>{
       api.get(`/posts/${id}`)
     .then(response => {
       if(response.status === 200){
-        setPost(response.data);
-        setCategory(response.data.categories.map(c => c.id)[0]);
+        const {id, title, body} = response.data;
+        console.log(response.data.categories.map(c=> c.id));
+        const category_ids = response.data.categories.map(c=>({value: c.id, label: c.description}));
+        setPost({...response.data, defaultCategory: category_ids});
+
+        formRef.current.setData({
+          id: id,
+          title: title,
+          body: body,
+          category_ids: category_ids,
+        });
+
       }
     })
     .catch(() => {
       toast({
-        title: 
-        "Dados não encontrados !", 
+        title: "Dados não encontrados !", 
         status:"error",
         isClosable: true, 
         duration: 2000
@@ -57,10 +68,20 @@ const PostEdit = () => {
     loadCategories();
   },[]);
 
-  const handleSubmit = (e) =>{
-    e.preventDefault();
+  const handleSubmit = async (data) =>{
+    const {id, title, body, category_ids} = data;
     setIsLoading(true);
-    api.put(`/posts/${id}`, {post: {...post, category_ids:[category]}})
+
+    if(!title || !body || !category_ids.length){
+      formRef.current.setErrors({
+        title: !title ? 'Titulo requerido' : '',
+        body: !body ? 'Descrição requerida' : '',
+        category_ids: !category_ids.length ? 'Selecione' : '',
+      });
+      setIsLoading(false);
+    }else{
+
+    await api.put(`/posts/${id}`, {post: {...data}})
       .then( response => {
         if(response.status === 202){
           toast({
@@ -90,13 +111,10 @@ const PostEdit = () => {
         toast({title: "Não foi possivel atualizar !", status:"error",isClosable: true, duration: 2000});
         history.push(`/post/${id}`);
       });
+    }
     };
 
 
-  const handleChange = (e) =>{
-    const {name, value} = e.target;
-    setPost({...post,[name]: value});
-  }
   
   return(
     isAuthenticated() ? (
@@ -114,23 +132,26 @@ const PostEdit = () => {
           <Tag color="red.100" bgColor="red.600" size="sm" ml={2}>Curtidas {post?.likes} </Tag>
           <Tag color="green.100" bgColor="green.600" size="sm" ml={2}>Comentários {post?.comments?.length} </Tag>
           <Box maxW="960px" mt={3} p={2}>
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} ref={formRef}>
               <Stack spacing={8}>
-              {categories.length && post ? 
-                (
-                <Categories 
-                  categories={categories} 
-                  setCategory={setCategory} 
-                  defaultValue={category}/>
-                ) : null
-              }
+              <FormControl>
+                <Select 
+                  isMulti
+                  options={categories.map(c=>({value: c.id, label: c.description}))} 
+                  name="category_ids" 
+                />
+              </FormControl>
+              <FormControl hidden>
+                <Input 
+                  placeholder="id" 
+                  name="id" 
+                />
+              </FormControl>
               <FormControl>
                 <FormLabel>Titulo</FormLabel>
                 <Input 
                   placeholder="Titulo" 
                   name="title" 
-                  onChange={handleChange}
-                  value={post?.title}
                 />
               </FormControl>
               <FormControl>
@@ -141,8 +162,6 @@ const PostEdit = () => {
                   p={3} 
                   placeholder="Descrição" 
                   name="body" 
-                  onChange={handleChange}
-                  value={post?.body}
                 />
               </FormControl>
               <FormControl>
@@ -151,7 +170,7 @@ const PostEdit = () => {
                 </Button>
               </FormControl>
               </Stack>
-            </form>
+            </Form>
           </Box>
         </Box>)
           : (
