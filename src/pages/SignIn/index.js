@@ -1,5 +1,5 @@
-import React, { useState , useContext } from 'react';
-import { Container, Box, Stack, Input, FormControl, FormLabel, Heading, Button } from '@chakra-ui/core';
+import React, { useContext, useRef } from 'react';
+import { Container, Box, Stack, FormControl, FormLabel, Heading, Button } from '@chakra-ui/core';
 import {Link, useHistory} from 'react-router-dom';
 import { useToast } from '@chakra-ui/core';
 import MainLayout from '../../components/MainLayout';
@@ -7,30 +7,33 @@ import {isAuthenticated, login} from './../../services/auth';
 import { Redirect } from 'react-router-dom';
 import api from '../../services/api';
 import AuthContext from './../../contexts/auth';
+import {Form} from '@unform/web';
+import Input from './../../components/common/Input';
 
 const SignIn = () => {
 
-  const [form, setForm] = useState({email: "", password: ""});
+  const formRef = useRef(null);
   const toast = useToast();
   const history = useHistory();
   const {loadCurrentUser} = useContext(AuthContext);  
 
-  const handleSubmit = async (e) =>{
-    e.preventDefault();
-
-    const {email,password} = form;
+  const handleSubmit = async (data) =>{
+  
+    const {email,password} = data;
     
     if(!email || !password){
       toast({
         title: "Login",
-        description: "Email ou senha inválidos",
+        description: "Preencha todos os campos",
         status: "error",
         position: "top-right",
         duration: 9000,
         isClosable: true
       });
+      formRef.current.setFieldError('email', !email ? 'Email requerido.' : '');
+      formRef.current.setFieldError('password', !password ? 'Senha requirida.' : '');
     }else{
-      api.post("/auth/signin", {auth: {...form}})
+      await api.post("/auth/signin", {auth: {...data}})
       .then(resp => {
         if(resp.status === 201){
           login(resp.data.jwt);
@@ -57,22 +60,16 @@ const SignIn = () => {
           isClosable: true
         });
       }).finally(()=>{
-        loadCurrentUser();
+        if(isAuthenticated()) loadCurrentUser();
       });
     }
   }
-
-  const handleChangeInput = (e) =>{
-    const {id, value} = e.target;
-    setForm({...form, [id]: value});
-  }
-
 
   return( !isAuthenticated() ?
     (<MainLayout>
       <Container maxW="md">
         <Box mt={3} p={6} shadow="md" borderWidth="1px" bg="blue"  borderRadius="5px">
-          <form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} ref={formRef}>
             <Box my={5} display="flex" justifyContent="start">
               <Heading>Login</Heading>
             </Box>
@@ -85,9 +82,7 @@ const SignIn = () => {
                   type="email"
                   placeholder="Email" 
                   title="Email" 
-                  value={form.email} 
-                  id="email"
-                  onChange={handleChangeInput}
+                  name="email"
                 />
               </FormControl>
               <FormControl>
@@ -98,9 +93,7 @@ const SignIn = () => {
                   type="password"
                   placeholder="Senha" 
                   title="Senha" 
-                  value={form.password} 
-                  id="password"
-                  onChange={handleChangeInput}
+                  name="password"
                 />
               </FormControl>
             </Stack>
@@ -119,7 +112,7 @@ const SignIn = () => {
                 Login
               </Button>
             </Box>
-          </form>
+          </Form>
         </Box>
       </Container>
     </MainLayout>

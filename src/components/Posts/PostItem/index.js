@@ -14,7 +14,7 @@ const PostItem = ({post}) => {
         <Link to={`/post/${post.id}`}>{post.title}</Link>        
       </Heading>
       <Tag size="sm" m={1} bgColor="purple.600">{post.categories?.map(c => c.description).join(", ")}</Tag>
-      <Text my={4}>{post.body.slice(1,200)} ...</Text>
+      <Text my={4}>{post.body.slice(0,200)} ...</Text>
       <Link 
         to={`/post/${post.id}`} 
         style={{textDecoration: "underline"}}> 

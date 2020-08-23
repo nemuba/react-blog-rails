@@ -1,25 +1,21 @@
-import React , {useState} from 'react';
-import { Container, Box, Stack, Input, FormControl, FormLabel, Heading, Button, useToast } from '@chakra-ui/core';
+import React , {useRef} from 'react';
+import { Container, Box, Stack, FormControl, FormLabel, Heading, Button, useToast } from '@chakra-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import api from './../../services/api';
 import MainLayout from '../../components/MainLayout';
-
+import { Form } from '@unform/web';
+import Input from './../../components/common/Input';
 
 const SignUp = () => {
 
-  const [form, setForm] = useState({name: "", username: "", email: "", password:"", password_confirmation:"" });
   const toast = useToast();
   const history = useHistory();
+  const formRef = useRef(null);
 
 
-  const handleChangeInput = (e) =>{
-    const {name, value} = e.target;
-    setForm({...form, [name]: value});
-  }
-
-  const handleSubmit = (e) =>{
-    e.preventDefault();
-    const {name, username, email, password, password_confirmation } = form;
+  const handleSubmit = async (data) =>{
+    
+    const {name, username, email, password, password_confirmation } = data;
     const validate = [name,username, email, password, password_confirmation];
 
     if(validate.includes("")){
@@ -31,8 +27,25 @@ const SignUp = () => {
         isClosable: true, 
         duration: 2000
       });
+      formRef.current.setErrors({
+        name: !name ? 'Nome requerido' : '', 
+        username: !username ? 'Nome de usuário' : '', 
+        email: !name ? 'Email requerido' : '', 
+        password: !password ? 'Senha requerida' : '', 
+        password_confirmation: !password_confirmation ? 'Confirmar senha requerida' : ''
+      });
     }else{
-      api.post("/auth/signup",{user: {...form}})
+      if(password !== password_confirmation){
+        toast({
+          title:"Confirmação de Senha", 
+          description: "A senha precisa ser igual", 
+          status:"error", 
+          position: "top-right",
+          isClosable: true, 
+          duration: 2000
+        });
+      }else{
+      await api.post("/auth/signup",{user: {...data}})
       .then((resp)=>{
         if(resp.status === 201){
           history.push('/signin');
@@ -57,13 +70,14 @@ const SignUp = () => {
         })
       });
     }
+    }
   }
 
   return(
     <MainLayout>
       <Container maxW="md">
         <Box mt={3} p={6} shadow="md" borderWidth="1px" bg="blue" borderRadius="5px">
-          <form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} ref={formRef}>
             <Box my={5} display="flex" justifyContent="start">
               <Heading>Criar conta</Heading>
             </Box>
@@ -72,29 +86,37 @@ const SignUp = () => {
                 <FormLabel>
                   Nome
                 </FormLabel>
-                <Input onChange={handleChangeInput} placeholder="Nome" name="name" value={form?.name}/>
+                <Input 
+                  placeholder="Nome" 
+                  name="name" 
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>
                   Username
                 </FormLabel>
-                <Input onChange={handleChangeInput} placeholder="Username" name="username" value={form?.username}/>
+                <Input 
+                  placeholder="Username" 
+                  name="username" 
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>
                   Email
                 </FormLabel>
-                <Input onChange={handleChangeInput} placeholder="Email" name="email" value={form?.email}/>
+                <Input 
+                  placeholder="Email" 
+                  name="email"
+                  type="email"
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>
                   Senha
                 </FormLabel>
                 <Input 
-                  onChange={handleChangeInput} 
                   placeholder="Senha" 
                   name="password" 
-                  value={form?.password}
                   type="password"
                 />
               </FormControl>
@@ -103,10 +125,8 @@ const SignUp = () => {
                   Confirme a Senha
                 </FormLabel>
                 <Input 
-                  onChange={handleChangeInput} 
                   placeholder="Confirme a Senha" 
                   name="password_confirmation" 
-                  value={form?.password_confirmation} 
                   type="password"
                 />
               </FormControl>
@@ -126,7 +146,7 @@ const SignUp = () => {
                 Criar
               </Button>
             </Box>
-          </form>
+          </Form>
         </Box>
       </Container>
     </MainLayout>
