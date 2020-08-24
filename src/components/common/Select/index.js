@@ -41,6 +41,12 @@ const Select = ({ name, ...rest }) => {
       defaultValue={defaultValue}
       ref={selectRef}
       label="Selecione"
+      styles={{
+        control: styles => ({...styles, backgroundColor: 'grey.600'}),
+        option: styles => ({...styles, color: 'black'}),
+        multiValue : styles => ({...styles, backgroundColor: 'blue', color:'white'}),
+        multiValueLabel : styles => ({...styles, color: 'white'}),
+      }}
       {...rest}
     />
       {error && <FormHelperText color="red.600">{error}</FormHelperText>}
