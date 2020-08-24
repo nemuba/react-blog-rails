@@ -118,12 +118,12 @@ const PostNew = () => {
                 />
               </FormControl>
               <FormControl>
-                <FormLabel>Descrição</FormLabel>
+                <FormLabel>Descrição: Escreva utilizando markdown</FormLabel>
                 <Input 
                   as="textarea" 
                   minH="300px" 
                   p={3} 
-                  placeholder="Descrição" 
+                  placeholder="# Titulo" 
                   name="body" 
                 />
               </FormControl>

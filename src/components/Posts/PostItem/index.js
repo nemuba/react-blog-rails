@@ -3,6 +3,7 @@ import { Box, Heading, Text, Tag } from '@chakra-ui/core';
 import {Link} from 'react-router-dom';
 import {FaHeart, FaComment, FaEdit} from 'react-icons/fa';
 import AuthContext from './../../../contexts/auth';
+import MarkDown from '../../Markdown';
 
 const PostItem = ({post}) => {
 
@@ -14,7 +15,7 @@ const PostItem = ({post}) => {
         <Link to={`/post/${post.id}`}>{post.title}</Link>        
       </Heading>
       <Tag size="sm" m={1} bgColor="purple.600">{post.categories?.map(c => c.description).join(", ")}</Tag>
-      <Text my={4}>{post.body.slice(0,200)} ...</Text>
+      <MarkDown markdown={post.body.slice(0,200)} />
       <Link 
         to={`/post/${post.id}`} 
         style={{textDecoration: "underline"}}> 
@@ -49,7 +50,7 @@ const PostItem = ({post}) => {
               </Box>
               </>
             ) : null}
-            <Text size="sm" mx={3}>{post.created_at}</Text>
+            <Text fontSize="12px"  mx={3} mt={1}>Criado em {post.created_at}</Text>
         </Box>
       </Box>
     </Box>

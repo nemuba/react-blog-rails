@@ -10,6 +10,7 @@ import api from '../../services/api';
 import { isAuthenticated } from '../../services/auth';
 import AuthContext from './../../contexts/auth';
 import Loading from 'react-loading';
+import MarkDown from '../../components/Markdown';
 
 const Reading = () => {
 
@@ -121,7 +122,7 @@ const Reading = () => {
           <Tag size="sm" m={1} color="blue.100" bgColor="blue.600">Criado por {post?.user?.name}</Tag>
           
           <Box maxW="960px" mt={3}>
-            <Text>{post?.body}</Text>
+            <MarkDown markdown={post?.body}/>
           </Box>
           <Flex maxW="960px" mt={3} p={2} flexWrap="wrap">
             <Box as="span" mt={3} flex="1 1 200px" display="flex">
