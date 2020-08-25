@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Tag, Text, Box, useToast } from '@chakra-ui/core';
+import { Tag, Text, Box, useToast, IconButton } from '@chakra-ui/core';
 import Dialog from './../../Dialog';
 import api from './../../../services/api';
 import AuthContext from './../../../contexts/auth';
+import { FaHeart, FaThumbsUp } from 'react-icons/fa';
 
 const Comment = ({comment, post_id, setPost}) => {
   const {user} = useContext(AuthContext);
@@ -47,10 +48,15 @@ const Comment = ({comment, post_id, setPost}) => {
         justifyContent="space-between"
         flexWrap="wrap"
       >
-        <Text color="grey.600" mt={3}>Criado em {comment.created_at}</Text>
-        {comment?.user?.id === user?.id ? (
-          <Dialog handleDelete={handleDeleteComment} id={post_id} title={"Excluir comentário"} size="sm"/>
-        ) : null}
+        <Text color="grey.600" mt={3} >
+          Criado em {comment.created_at}          
+        </Text>
+        
+        <Box>
+          {comment?.user?.id === user?.id ? (
+            <Dialog handleDelete={handleDeleteComment} id={post_id} title={"Excluir comentário"} size="sm"/>
+          ) : null}
+          </Box>
       </Box>
     </Box>
   );
