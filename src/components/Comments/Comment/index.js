@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { Tag, Text, Box, useToast, IconButton } from '@chakra-ui/core';
+import { Tag, Text, Box, useToast } from '@chakra-ui/core';
 import Dialog from './../../Dialog';
 import api from './../../../services/api';
 import AuthContext from './../../../contexts/auth';
-import { FaHeart, FaThumbsUp } from 'react-icons/fa';
 
 const Comment = ({comment, post_id, setPost}) => {
   const {user} = useContext(AuthContext);
