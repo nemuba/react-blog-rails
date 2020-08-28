@@ -3,15 +3,19 @@ import { Box, Container, Stack, FormControl, Heading, Button, useToast } from '@
 import { Form } from '@unform/web';
 import MainLayout from './../../components/MainLayout';
 import api from './../../services/api';
+import { logout } from './../../services/auth';
 import AuthContext from './../../contexts/auth';
 import Input from './../../components/common/Input';
+import Dialog from './../../components/Dialog';
+import { useHistory } from 'react-router-dom';
 
 function Account() {
   const {user,loadCurrentUser } = useContext(AuthContext);
   const toast = useToast();
   const formRef = useRef(null);
   const formRefPassword = useRef(null);
-
+  const history = useHistory();
+  
   const handleUpdate = async (data) =>{
     const {id, name, username, email} = data;
     if(!name || !username || !email){
@@ -90,6 +94,34 @@ function Account() {
   }
   }
 
+  const handleDeleteAccount = async (id) => {
+    await api.delete(`/users/${id}`)
+    .then(response=> {
+      if(response.status === 204){
+      toast({
+        title: "Conta", 
+        description: "Conta excluida !", 
+        status: "success",
+        position: "top-right", 
+        duration: 2000, 
+        isClosable: true
+      });
+      logout();
+      history.push("/");
+    }
+    })
+    .catch(()=>{
+      toast({
+        title: "Conta", 
+        description: "Não foi possivel excluir conta", 
+        status: "error",
+        position: "top-right", 
+        duration: 2000, 
+        isClosable: true
+      });
+    })
+  }
+
   useEffect(()=>{
     const {id, name, username, email} = user;
     formRef.current.setData({id, name, username, email});
@@ -154,7 +186,15 @@ function Account() {
               <Button variant="outline" colorScheme="green" type="submit">Mudar senha</Button>
             </FormControl>
           </Stack>
-          </Form>        
+          </Form>
+
+          <Heading  mt={8} mb={4} fontSize="1.0em">Excluir minha conta</Heading>
+          <Dialog 
+            title="Excluir minha Conta" 
+            handleDelete={handleDeleteAccount}
+            colorSchema="red.300"
+            id={user.id} 
+          />  
         </Box>
       </Container>
     </MainLayout>

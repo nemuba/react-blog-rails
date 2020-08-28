@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Container, Box, Stack, FormControl, FormLabel, Heading, Button } from '@chakra-ui/core';
 import {Link, useHistory} from 'react-router-dom';
 import { useToast } from '@chakra-ui/core';
@@ -15,10 +15,11 @@ const SignIn = () => {
   const formRef = useRef(null);
   const toast = useToast();
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   const {loadCurrentUser} = useContext(AuthContext);  
 
   const handleSubmit = async (data) =>{
-  
+    setIsLoading(true);
     const {email,password} = data;
     
     if(!email || !password){
@@ -32,6 +33,7 @@ const SignIn = () => {
       });
       formRef.current.setFieldError('email', !email ? 'Email requerido.' : '');
       formRef.current.setFieldError('password', !password ? 'Senha requirida.' : '');
+      setIsLoading(false);
     }else{
       await api.post("/auth/signin", {auth: {...data}})
       .then(resp => {
@@ -59,8 +61,10 @@ const SignIn = () => {
           duration: 9000,
           isClosable: true
         });
+       
       }).finally(()=>{
         if(isAuthenticated()) loadCurrentUser();
+        setIsLoading(false);
       });
     }
   }
@@ -106,8 +110,10 @@ const SignIn = () => {
               <Button 
                 mt={8}
                 size="md"
+                variant="outline"
                 colorScheme="blue" 
                 type="submit"
+                isLoading={isLoading}
                 >
                 Login
               </Button>

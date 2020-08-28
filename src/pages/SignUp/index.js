@@ -1,4 +1,4 @@
-import React , {useRef} from 'react';
+import React , {useRef, useState} from 'react';
 import { Container, Box, Stack, FormControl, FormLabel, Heading, Button, useToast } from '@chakra-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import api from './../../services/api';
@@ -11,10 +11,10 @@ const SignUp = () => {
   const toast = useToast();
   const history = useHistory();
   const formRef = useRef(null);
-
+  const [isLoading, setIsLoading] =  useState(false);
 
   const handleSubmit = async (data) =>{
-    
+    setIsLoading(true);
     const {name, username, email, password, password_confirmation } = data;
     const validate = [name,username, email, password, password_confirmation];
 
@@ -34,6 +34,7 @@ const SignUp = () => {
         password: !password ? 'Senha requerida' : '', 
         password_confirmation: !password_confirmation ? 'Confirmar senha requerida' : ''
       });
+      setIsLoading(false);
     }else{
       if(password !== password_confirmation){
         toast({
@@ -44,10 +45,19 @@ const SignUp = () => {
           isClosable: true, 
           duration: 2000
         });
+        setIsLoading(false)
       }else{
       await api.post("/auth/signup",{user: {...data}})
       .then((resp)=>{
         if(resp.status === 201){
+          toast({
+            title: "Sign Up",
+            description: "Conta criada com sucesso !",
+            status: "success",
+            duration: 2000,
+            position: "top-right",
+            isClosable: true
+          });
           history.push('/signin');
         }else if(resp.status === 200){
           toast({
@@ -68,7 +78,7 @@ const SignUp = () => {
           isClosable:true, 
           position:"top-right"
         })
-      });
+      }).finally(()=> setIsLoading(false));
     }
     }
   }
@@ -139,9 +149,11 @@ const SignUp = () => {
               </Box>
               <Button 
                 type="submit"
+                variant="outline"
                 mt={8}
                 size="md"
                 colorScheme="blue" 
+                isLoading={isLoading}
                 >
                 Criar
               </Button>
