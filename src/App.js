@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   ChakraProvider,
   CSSReset,
@@ -15,7 +15,7 @@ themeDefault.config = {
 };
 
 function App() {
-  useEffect(()=> console.log(themeDefault),[]);
+  
   return (
     <ChakraProvider theme={themeDefault}>
       <CSSReset />
