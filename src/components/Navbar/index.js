@@ -15,7 +15,7 @@ const Navbar = () => {
       borderBottom="1px solid #ddd">
     <Menu>
       <MenuButton fontWeight="bold" fontSize="xl">
-        <IconButton icon={<FaBlog />} mr={3}/> React Blog
+        <IconButton icon={<FaBlog />} mr={3}/> Alef Oliveira
       </MenuButton>
       <MenuList>
         <MenuGroup title={ isAuthenticated() ? "Perfil" : "Blog"}>
