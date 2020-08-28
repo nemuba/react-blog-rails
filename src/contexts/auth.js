@@ -17,7 +17,10 @@ export const AuthProvider = ({children}) => {
   const loadCurrentUser = () =>{
     api.get("/auth/current_user")
     .then(response => setUser(response.data))
-    .catch(error => console.log(error));
+    .catch(error => {
+      logout();
+      window.location.href = "/";
+    });
   }
 
   useEffect(()=>{
